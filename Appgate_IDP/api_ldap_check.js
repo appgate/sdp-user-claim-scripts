@@ -120,7 +120,7 @@ function AG_Class(hostname,version_num,username,pwd,provider) {
 //////////
 // Main
 var userAttributes;
-//var groups=[]; //refinement example - part 1: declare default value of proper datatype
+//var group_list=[]; //refinement example - part 1: declare default value of proper datatype
 
 if(claims.user[username_claim]){
 	var conn=new AG_Class(APPGATE_CONTROLLER_URI,APPGATE_API_VERSION,APPGATE_API_USER,APPGATE_API_PASSWORD);
@@ -129,7 +129,7 @@ if(claims.user[username_claim]){
 		userAttributes = conn.getUserAttributes(idp_guid,claims.user[username_claim]);
 		/*refinement example - part 2: set desired value(s)
 		 *	if(userAttributes && userAttributes.mappedAttributes.groups){
-		 *		groups = userAttributes.mappedAttributes.groups;
+		 *		group_list = userAttributes.mappedAttributes.groups;
 		 *	}
 		 */
 	}
@@ -143,4 +143,4 @@ if(!userAttributes.groups){
   userAttributes.groups="none";
 }
 return userAttributes;
-// return groups;	// refinement example - part 3: return desired value(s)
+// return {groups:group_list};	// refinement example - part 3: return desired value(s)

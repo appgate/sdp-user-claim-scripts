@@ -9,7 +9,7 @@ When an LDAP identity provider is configured it can 'test user *username*' retri
 ## Pre-requisite
 - Correctly configured LDAP IDP in Appgate
 - Matching claim between IDP user signs in with and the users 'username' in the LDAP IDP
-- Valid certificate on the Admin Portal or the CA cert added to Trusted Certificates
+- Valid certificate on the Admin Portal or have the Appgate Self-signed CA cert added to [Trusted Certificates](https://sdphelp.appgate.com/adminguide/trusted-certificate-configure.html)
 
 ## Configuration:
 - Setup an API user on your collective (local user account with an admin-role that only allows it to query the LDAP IDP for attributes)
