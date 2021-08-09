@@ -33,9 +33,10 @@ When an LDAP identity provider is configured it can 'test user *username*' retri
     APPGATE_API_PASSWORD	| 6 | Password for the local account signing in
     idp_guid	| 8 | id of the IDP the attributes will be retrived from
     username_claim	| 9 | name of session claim from the original IDP that will be passed to the LDAP IDP to identify the user to collect data from
-    log2Console	| 11 | Will display custom logging in browser when using the 'test' function of the user-claim-script
-    log2Audit | 12 | Will write the custom logging to the audit logs of the Appgate Collective 
-	logTag | 13 | Prepends text to any custom logging for easy identification
+	ldap_request_timeout | 10 | adjust timeout for this script awaiting response on ldap query request
+    log2Console	| 12 | Will display custom logging in browser when using the 'test' function of the user-claim-script
+    log2Audit | 13 | Will write the custom logging to the audit logs of the Appgate Collective 
+	logTag | 14 | Prepends text to any custom logging for easy identification
 
 - Create a new user claim script
 	- Provide unique name

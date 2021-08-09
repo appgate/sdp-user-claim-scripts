@@ -7,6 +7,7 @@ var APPGATE_API_PASSWORD="my_api_password";
 
 var idp_guid = "63100f4c-f279-4ac7-aa9c-7d2a6b0fe72a";
 var username_claim = "username";
+var ldap_request_timeout = 3000; //3000 is Appgates default
 
 var log2Console = true; //Visible UI edit mode test panel
 var log2Audit = false;  //Visible in audit logs
@@ -51,17 +52,19 @@ function AG_Class(hostname,version_num,username,pwd,provider) {
 		];
 	},
 	
-	this.sendRequest= function(HttpMethod,endpoint_segment,data,queryStrings){
+	this.sendRequest= function(HttpMethod,endpoint_segment,data,queryStrings,timeout){
+		if(typeof(timeout)==='undefined'){ timeout=3000;}
+
 		var response = null;
 		var endpoint = this.ag_hostname+"/admin/"+endpoint_segment;
 				
 		
 		if(HttpMethod.toUpperCase()=="POST"){
-			response = httpPost(endpoint,JSON.stringify(data), 'application/json', this.ag_headers);			
+			response = httpPost(endpoint,JSON.stringify(data), 'application/json', this.ag_headers,timeout);			
 		}else if(HttpMethod.toUpperCase()=="PUT"){
-			response = httpPut(endpoint,JSON.stringify(data), 'application/json', this.ag_headers);			
+			response = httpPut(endpoint,JSON.stringify(data), 'application/json', this.ag_headers,timeout);			
 		}else if(HttpMethod.toUpperCase()=="GET"){
-			response=httpGet(endpoint,this.ag_headers);
+			response=httpGet(endpoint,this.ag_headers,timeout);
 		}else{
 			log("HttpMethod not implemented");
 		}
@@ -98,12 +101,14 @@ function AG_Class(hostname,version_num,username,pwd,provider) {
 		return response;
 	},	
 	
-	this.getUserAttributes = function(idp_id,username){
+	this.getUserAttributes = function(idp_id,username,timeout){
+		if(typeof(timeout)==='undefined'){ timeout=3000;}
+		
 		var data ={"username":username};
 		var attribute_results;
 		
 		this.ensureAuth();
-		var response = this.sendRequest("post","identity-providers/"+idp_id+"/attributes",data);
+		var response = this.sendRequest("post","identity-providers/"+idp_id+"/attributes",data,null,timeout);
 		var status = response.statusCode;
 		if(status == 200){
 			attribute_results = JSON.parse(response.data);
@@ -126,7 +131,7 @@ if(claims.user[username_claim]){
 	var conn=new AG_Class(APPGATE_CONTROLLER_URI,APPGATE_API_VERSION,APPGATE_API_USER,APPGATE_API_PASSWORD);
 	var authRequest = conn.login();
 	if(authRequest.statusCode ==200){
-		userAttributes = conn.getUserAttributes(idp_guid,claims.user[username_claim]);
+		userAttributes = conn.getUserAttributes(idp_guid,claims.user[username_claim],ldap_request_timeout);
 		/*refinement example - part 2: set desired value(s)
 		 *	if(userAttributes && userAttributes.mappedAttributes.groups){
 		 *		group_list = userAttributes.mappedAttributes.groups;
