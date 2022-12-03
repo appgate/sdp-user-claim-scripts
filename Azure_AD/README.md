@@ -4,7 +4,7 @@ Using SAML and Graph API to authorize by Azure AD groups
 
 ## Scenario
 
-A company using Azure Active Directory that has more than 150 user groups and is using SAML for authentication.  There is a size limitation that will exceed this implementation.
+A company using Azure Active Directory that has more than 150 user groups for any users and is using SAML for authentication.  There is a size restriction in the SAML assertion which causes no groups to be returned through the normal SAML assertion.
 
 The implementation comes from [Microsoft identity platform and the OAuth 2.0 client credentials flow](https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow) article.
 
@@ -54,10 +54,10 @@ In “API Permissions”, verify
     1. Click **Save**
 1. Navigate to **System** > **Identity Providers** 
     1. Select IDP that uses the SAML to authenticate against MS Azure AD
-    1. Map Attributes to Use Claims
-        1. Must have TenantId
-        1. Must have UserId
-    1. Add User Claim Script
+    1. Map Attributes to User Claims
+        1. Must have a claim named TenantId mapped with the TenantID
+        1. Must have a claim named UserId mapped with the Object Identitfier
+    1. Add User Claim Script by selecting the name of the script you saved above
     1. verify
 1. Navigate to **Operations** > **Policies**
     1. Create or select the Policy for users using MS Azure AD with SAML
@@ -65,6 +65,6 @@ In “API Permissions”, verify
         1. Select Identity Provider, with the MS Azure AD using SAML from earlier
         1. Click on check mark to save
     1. Under “Assignment”, click **Add New**, again
-        1. Select **User Claim Script** with an expression like this: “azureGroups.indexOf("100") > -1”
+        1. To create an assignment criteria that uses a group name from the new list provided, Select **User Claim Script** with an expression like this: “azureGroups.indexOf("INSERT YOUR GROUP NAME HERE") > -1”
         1. Click on check mark to save
         1. Click **Save**
