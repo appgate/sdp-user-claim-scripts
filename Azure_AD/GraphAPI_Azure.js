@@ -9,111 +9,163 @@ https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-oauth2-client
  6. Collect the displayNames of the Groups
 */
 
-var list_of_group_displayNames = [];
-var groupsCount = 0;
-var headers = [{ key: "Accept", value: "*/*" }];
+// update values below
 
-///////////////
-// Logging
-var log2Console = true; //Visible UI edit mode test panel
-var log2Audit = false;  //Visible in audit logs
-function log(msg) {
-	var prefix = "GraphAPI_Azure: ";
-	msg = prefix + msg;
-	if (log2Console)
-		console.log(msg + "; ");
-	if (log2Audit)
-		auditLog(msg);
+const applicationId = "... enter the application id here ...";
+const clientSecret = "... enter the secret here ...";
+
+const logging = false;
+
+
+// advanced settings, contact Appgate support
+
+// group name prefix to filter, if any.
+const displayNameStartsWith = ""; 
+
+const apiTimeOut = 1500; // miliseconds. max 3000 (default)
+const apiMaxPages = 5;   // max number of pages to follow in graph api
+const apiPageSize = 999;  // max number of groups per page. must be 999.
+
+const cacheTokenHours = 0.5; // 0 to disable auth caching.
+const cacheGroupsHours = 0; // 0 to disable group caching. memory intensive.
+
+// do not edit any setting after this line
+
+const apiUrl = `https://graph.microsoft.com/v1.0/users/${claims.user["UserId"]}/transitiveMemberOf`;
+const cacheKeyToken = `azure-ad-token-${claims.user["TenantId"]}`;
+const cacheKeyGroups = `azure-ad-groups-${claims.user["UserId"]}`;
+
+const headers = [{ key: "Accept", value: "*/*" }];
+const empty = { "azureGroups": [], "groupCount": 0 };
+
+// fail if not configured correctly
+if (!claims.user["TenantId"] || !claims.user["UserId"] || !applicationId || !clientSecret) {
+  return empty;
 }
 
-function process_response(response) {
-	if (!response) {
-		log("No reponse from api request");
-	} else if (response.statusCode >= 200 && response.statusCode < 300 && response.data) {
-		return JSON.parse(response.data);
-	}
-	log("Request failure [ " + response.statusCode + " ]:" + response.data);
-	return undefined;
+const log = (msg) => {
+  if (logging) {
+    console.log(msg);
+  }
 }
 
-function authorizeViaAzure_AD(tenant_id) {
-	var application_id = "<application-id-guid>";  // REPLACE with real value
-	var client_secret_value = "<client-secret-value>";  // REPLACE with real value
-	var scope = "https://graph.microsoft.com/.default";
-	var request_data = "grant_type=client_credentials&client_id=" + application_id + "&client_secret=" + client_secret_value + "&scope=" + encodeURI(scope);
-	var auth_endpoint = "https://login.microsoftonline.com/" + tenant_id + "/oauth2/v2.0/token";
-	var auth_response = httpPost(auth_endpoint, request_data, "application/x-www-form-urlencoded");
-
-	var response_data = process_response(auth_response);
-	if (response_data) {
-		headers.push({ key: "Authorization", value: "Bearer " + response_data.access_token });
-		return true;
-	}
-	return false;
+const processResponse = (response) => {
+  if (!response) {
+    log("No reponse from api request.");
+    return false;
+  }
+  if (!response.data || response.statusCode != 200) {
+    log(`Request failed with code ${response.statusCode}`);
+    return false;
+  }
+  return JSON.parse(response.data);
 }
 
-function addDisplayNameToList(groups) {
-	for (var index = 0; index < groups.length; index++) {
-		var group = groups[index];
-		list_of_group_displayNames.push(group["displayName"]);
-		groupsCount++;
-	}
+const getAccessToken = () => {
+  const scope = "https://graph.microsoft.com/.default";
+  const payload = `grant_type=client_credentials&client_id=${applicationId}&client_secret=${clientSecret}&scope=${encodeURI(scope)}`;
+  const endpoint = `https://login.microsoftonline.com/${claims.user["TenantId"]}/oauth2/v2.0/token`;
+
+  log("Sending token request.");
+  const response = httpPost(endpoint, payload, "application/x-www-form-urlencoded", [], apiTimeOut);
+
+  const responseData = processResponse(response);
+  if (!responseData) {
+    return false;
+  }
+
+  return responseData.access_token;
 }
 
-function getGroupNamesFromApi() {
-	var tenant_id = claims.user["TenantId"];
-	var user_id = claims.user["UserId"];
-	var graph_api_url = "https://graph.microsoft.com/v1.0/users/";
-	if (tenant_id && user_id) {
-		try {
-			if (authorizeViaAzure_AD(tenant_id)) {
-				var endpoint = filterBydisplayName(graph_api_url + user_id + "/memberOf");
-				var response = httpGet(endpoint, headers);
-				var graphResultData = process_response(response);
-				if (graphResultData) {
-					var groups = graphResultData["value"];
-					addDisplayNameToList(groups);
-					getGroupsOverlimit(graphResultData["@odata.nextLink"]);
-				}
-			}
-		} catch (err) {
-			log(err);
-		}
-	}
+const getEndpointUrl = () => {
+  const endpoint = `${apiUrl}?$top=${apiPageSize}`;
 
-	function filterBydisplayName(endpoint) {
-		var displayNameStartswith = undefined;  // REPLACE with real value if filtering
-		var filter = "$count=true&$orderby=displayName&$filter=startswith(displayName,'" + displayNameStartswith + "')";
-		if (displayNameStartswith) {
-			endpoint = endpoint + "?" + encodeURI(filter);
-			headers.push({ key: "ConsistencyLevel", value: "eventual" });
-		}
-		return endpoint;
-	}
+  if (!displayNameStartsWith) {
+    return endpoint;
+  }
 
-	function getGroupsOverlimit(nextLink) {
-		while (nextLink) {
-			var from = nextLink.indexOf("?");
-			var until = nextLink.length;
-			var parameterLink = nextLink.slice(from, until);
-			var newLink = graph_api_url + user_id + "/memberOf" + parameterLink;
-			var responseNext = httpGet(newLink, headers);
-			var nextResultData = process_response(responseNext);
-			if (nextResultData) {
-				var additionalGroups = nextResultData["value"];
-				addDisplayNameToList(additionalGroups);
-				nextLink = nextResultData["@odata.nextLink"];
-			} else {
-				nextLink = undefined;
-			}
-		}
-	}
+  headers.push({ key: "ConsistencyLevel", value: "eventual" });
+  const filter = `&$count=true&$orderby=displayName&$filter=startswith(displayName,'${displayNameStartsWith}')`;
+  return `${endpoint}${encodeURI(filter)}`;
 }
-///////////////
-// MAIN
-getGroupNamesFromApi();
 
-return { 
-	"azureGroups": list_of_group_displayNames, 
-	"groupsCount": groupsCount
-};
+const getGroups = () => {
+  const groups = [];
+  const endpoint = getEndpointUrl();
+
+  log("Sending first groups request.");
+  const response = httpGet(endpoint, headers, apiTimeOut);
+  const graphResultData = processResponse(response);
+
+  if (!graphResultData) {
+    return groups;
+  }
+
+  graphResultData["value"].forEach(group => groups.push(group["displayName"]));
+  let nextLink = graphResultData["@odata.nextLink"];
+
+  let i = 0;
+  while (nextLink && i++ < apiMaxPages) {
+    const from = nextLink.indexOf("?");
+    const until = nextLink.length;
+    const parameterLink = nextLink.slice(from, until);
+    const newLink = `${apiUrl}${parameterLink}`;
+
+    log(`Sending next groups request ${i + 1}.`);
+    const responseNext = httpGet(newLink, headers, apiTimeOut);
+    const nextResultData = processResponse(responseNext);
+    if (nextResultData) {
+      nextResultData["value"].forEach(group => groups.push(group["displayName"]));
+      nextLink = nextResultData["@odata.nextLink"];
+    } else {
+      nextLink = false;
+    }
+  }
+
+  return groups;
+}
+
+let groups = [];
+if (cacheGroupsHours > 0) {
+  groups = cache.getIfPresent(cacheKeyGroups);
+  if (groups) {
+    log("Group caching is enabled, using the cache.");
+    return { "azureGroups": groups, "groupCount": groups.length };
+  } else {
+    log("Group caching is enabled, but cache is empty.");
+  }
+}
+
+let token;
+if (cacheTokenHours > 0) {
+  token = cache.getIfPresent(cacheKeyToken);
+  log("Token caching is enabled, using the cache.");
+}
+
+if (!token) {
+  log("Token is empty, fetching again.");
+  token = getAccessToken();
+
+  if (!token) {
+    log("Failed to fetch token, failing.");
+    return empty;
+  }
+
+  if (cacheTokenHours > 0) {
+    log("Token caching is enabled, caching the token.");
+    cache.put(cacheKeyToken, token, 60 * 60 * cacheTokenHours);
+  }
+}
+
+headers.push({ key: "Authorization", value: `Bearer ${token}` });
+
+groups = getGroups();
+
+log(`Fetched groups: ${groups.length}`);
+
+if (cacheGroupsHours > 0) {
+  log("Group caching is enabled, caching the groups.");
+  cache.put(cacheKeyGroups, groups, 60 * 60 * cacheGroupsHours);
+}
+
+return { "azureGroups": groups, "groupCount": groups.length };
