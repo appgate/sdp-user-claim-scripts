@@ -1,5 +1,5 @@
 /**
- * @name Appgate SAML Add >= 150 Groups to User Claims
+ * @name Appgate Azure AD SAML Add >= 150 Groups to User Claims
  * @description
  * 1. Retrieves Tenant ID and User ID from user claims.
  * 2. Requests an authorization token from Microsoft API and adds authorization token to headers.

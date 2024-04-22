@@ -125,5 +125,7 @@ Microsoft links following these instructions.
                name. ```azureGroups.indexOf("YOUR_GROUP_NAME") > -1```
         1. Click on the check mark to save the assignment.
     1. Click **Save** to save the policy.
-
 ---
+
+**Future documentation clarifications**
+- Suggest how to get Azure Tenant ID into user claim map as `TenantId`.
