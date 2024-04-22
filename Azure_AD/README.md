@@ -111,6 +111,8 @@ Microsoft links following these instructions.
 1. Navigate to **System** > **Identity Providers**
     1. Select the Azure AD SAML identity provider.
     1. Map Attributes to User Claims
+       > [!IMPORTANT]
+       > Pay attention to name casing 
         1. Must have a claim named `TenantId` mapped to the Azure Tenant ID.
         1. Must have a claim named `UserId` mapped to the Azure user's object ID or user principal name (UPN).
     1. Add User Claim Script by selecting the name of the script created above
