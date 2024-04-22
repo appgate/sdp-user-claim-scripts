@@ -1,7 +1,7 @@
 # GraphAPI_Azure.js
 
-| On This Page |
-| --- |
+| On This Page                                                                                  |
+|-----------------------------------------------------------------------------------------------|
 | [Objective](#objective)<br>[Prerequisites](#prerequisites)<br>[Configuration](#configuration) |
 
 Using Azure AD SAML and Graph API to authorize by Azure AD group names
@@ -34,11 +34,11 @@ article.
 
 ### Required Information
 
-| Information                                 | Format | Purpose                                                                           |
-|---------------------------------------------|--------|-----------------------------------------------------------------------------------|
-| Azure Active Directory Tenant ID            | GUID   | Used in Appgate identity providers to map the Tenant ID attribute to a user claim |
-| Azure Application ID for Appgate            | GUID   | Used to call the Microsoft Graph API to request group names for user claims       |
-| Azure Application client secret for Appgate | text   | Used to call the Microsoft Graph API to request group names for user claims       |       
+| Information                                 | Type/Format         | Purpose                                                                           |
+|---------------------------------------------|---------------------|-----------------------------------------------------------------------------------|
+| Azure Active Directory Tenant ID            | string, format:GUID | Used in Appgate identity providers to map the Tenant ID attribute to a user claim |
+| Azure Application ID for Appgate            | string, format:GUID | Used to call the Microsoft Graph API to request group names for user claims       |
+| Azure Application client secret for Appgate | string              | Used to call the Microsoft Graph API to request group names for user claims       |       
 
 ### (1) Retrieve Azure AD tenant and application IDs
 
@@ -74,8 +74,11 @@ Microsoft links following these instructions.
             - Admin consent is granted
 
 **Reference Links**
-* [Authentication and authorization basics (external)](https://learn.microsoft.com/en-us/graph/auth/auth-concepts) - Use application permissions (app roles) scenario for Microsoft Graph permissions
-* [Register an application with the Microsoft identity platform (external)](https://docs.microsoft.com/en-us/graph/auth-register-app-v2) - Create an application for the AppGate SDP Controller
+
+* [Authentication and authorization basics (external)](https://learn.microsoft.com/en-us/graph/auth/auth-concepts) - Use
+  application permissions (app roles) scenario for Microsoft Graph permissions
+* [Register an application with the Microsoft identity platform (external)](https://docs.microsoft.com/en-us/graph/auth-register-app-v2) -
+  Create an application for the AppGate SDP Controller
 
 ---
 
@@ -102,6 +105,7 @@ Microsoft links following these instructions.
 ### (3) Create a new user claim script in Appgate
 
 #### Create a user claims script
+
 1. In the Appgate Controller Admin UI, navigate to **Scripts** > **User Claims**
 1. Click **Add New**.
 1. Provide a name for the user claims script and note it for a later step.
@@ -109,11 +113,12 @@ Microsoft links following these instructions.
 1. Click **Save**
 
 #### Apply claims script to identity provider
+
 1. Navigate to **System** > **Identity Providers**
 1. Select the Azure AD SAML identity provider.
 1. Map attributes to user claims. ***Claim name capitalization must be exactly as listed below.***
-   1. Must have a claim named `TenantId` mapped to the Azure Tenant ID.
-   1. Must have a claim named `UserId` mapped to the Azure user's object ID or user principal name (UPN).
+    1. Must have a claim named `TenantId` mapped to the Azure Tenant ID.
+    1. Must have a claim named `UserId` mapped to the Azure user's object ID or user principal name (UPN).
 1. Add User Claim Script by selecting the name of the previously created script.
 
 #### Create a policy assignment
@@ -127,9 +132,11 @@ Microsoft links following these instructions.
     1. Create a group name assignment criteria by selecting **User Claim Script**.
         1. Create an expression to select the group, replacing `YOUR_GROUP_NAME` with the relevant group
            name. ```azureGroups.indexOf("YOUR_GROUP_NAME") > -1```
-   1. Click on the check mark to save the assignment.
+    1. Click on the check mark to save the assignment.
 1. Click **Save** to save the policy.
+
 ---
 
 **Future documentation clarifications**
+
 - Suggest how to get Azure Tenant ID into user claim map as `TenantId`.
