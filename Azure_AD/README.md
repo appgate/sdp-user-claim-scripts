@@ -74,11 +74,10 @@ Microsoft links following these instructions.
             - Admin consent is granted
 
 **Reference Links**
+* [Authentication and authorization basics (external)](https://learn.microsoft.com/en-us/graph/auth/auth-concepts) - Use application permissions (app roles) scenario for Microsoft Graph permissions
+* [Register an application with the Microsoft identity platform (external)](https://docs.microsoft.com/en-us/graph/auth-register-app-v2) - Create an application for the AppGate SDP Controller
 
-| Article Link                                                                                                                           | Notes                                                                            |
-|----------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| [Authentication and authorization basics (external)](https://learn.microsoft.com/en-us/graph/auth/auth-concepts)                       | Use application permissions (app roles) scenario for Microsoft Graph permissions |
-| [Register an application with the Microsoft identity platform (external)](https://docs.microsoft.com/en-us/graph/auth-register-app-v2) | Create an application for the AppGate SDP Controller                             |
+---
 
 ### (2) Prepare script for Appgate use
 
@@ -102,31 +101,34 @@ Microsoft links following these instructions.
 
 ### (3) Create a new user claim script in Appgate
 
-1. Login to Appgate Controller Admin UI
-1. Navigate to **Scripts** > **User Claims**
-    1. Click **Add New**.
-    1. Provide a name for the user claims script.
-    1. Replace JavaScript with prepared code
-    1. Click **Save**
+#### Create a user claims script
+1. In the Appgate Controller Admin UI, navigate to **Scripts** > **User Claims**
+1. Click **Add New**.
+1. Provide a name for the user claims script and note it for a later step.
+1. Replace JavaScript with prepared code.
+1. Click **Save**
+
+#### Apply claims script to identity provider
 1. Navigate to **System** > **Identity Providers**
-    1. Select the Azure AD SAML identity provider.
-    1. Map Attributes to User Claims
-       > [!IMPORTANT]
-       > Pay attention to name casing 
-        1. Must have a claim named `TenantId` mapped to the Azure Tenant ID.
-        1. Must have a claim named `UserId` mapped to the Azure user's object ID or user principal name (UPN).
-    1. Add User Claim Script by selecting the name of the script created above
+1. Select the Azure AD SAML identity provider.
+1. Map attributes to user claims. ***Claim name capitalization must be exactly as listed below.***
+   1. Must have a claim named `TenantId` mapped to the Azure Tenant ID.
+   1. Must have a claim named `UserId` mapped to the Azure user's object ID or user principal name (UPN).
+1. Add User Claim Script by selecting the name of the previously created script.
+
+#### Create a policy assignment
+
 1. Navigate to **Operations** > **Policies**
-    1. Create or select the Policy for users using MS Azure AD with SAML
-    1. Within **Assignment**, click **Add New**
-        1. Select the SAML MS Azure AD identity provider
-        1. Click check mark to save
-    1. Under **Assignment**, click **Add New**
-        1. Create a group name assignment criteria by selecting **User Claim Script**.
-            1. Create an expression to select the group, replacing `YOUR_GROUP_NAME` with the relevant group
-               name. ```azureGroups.indexOf("YOUR_GROUP_NAME") > -1```
-        1. Click on the check mark to save the assignment.
-    1. Click **Save** to save the policy.
+1. Create or select the Policy for users using MS Azure AD with SAML
+1. Within **Assignment**, click **Add New**
+    1. Select the SAML MS Azure AD identity provider
+    1. Click check mark to save
+1. Under **Assignment**, click **Add New**
+    1. Create a group name assignment criteria by selecting **User Claim Script**.
+        1. Create an expression to select the group, replacing `YOUR_GROUP_NAME` with the relevant group
+           name. ```azureGroups.indexOf("YOUR_GROUP_NAME") > -1```
+   1. Click on the check mark to save the assignment.
+1. Click **Save** to save the policy.
 ---
 
 **Future documentation clarifications**
