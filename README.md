@@ -1,14 +1,13 @@
 # User Claim Scripts for Appgate SDP Controller
 
-This repo is to provide customers using Appgate SDP templates of User Claim Scripts to be used in their Policies.  
+This repository contains commonly used User Claim Scripts for Appgate SDP.
 
-The individual files are for different Identity Providers that are used to do a call from the Controller to IdP after getting a claim from the SDP Client in order to authorize the user (typically through user groups).
+The scripts are provided as examples and may require modification to suit specific environments or use cases.
 
-## Appgate Controller setup
+Appgate SDP administrators should review and adapt them according to their organization's requirements and policies.
 
-1. Login to Appgate Controller Admin UI
-1. Navigate to **Scripts** > **User Claims**
-    1. Click **Add New**
-    1. Provide name
-    1. Replace JavaScript with code from code in the appropriate file
-    1. Click **Save**
+Current scripts are:
+
+- Fetching additional groups from another LDAP Provider:  [fetch-groups-from-ldap](fetch-groups-from-ldap/README.md)
+
+- Fetching additional groups from Microsft Graph API: [fetch-groups-from-graph-api](fetch-groups-from-graph-api/README.md)
