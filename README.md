@@ -1,10 +1,14 @@
-# User Claim Scripts for Appgate SDP Controller
+<p align="center">
+	<img src="./appgate.svg" width="200">
+</p>
 
-This repository contains commonly used User Claim Scripts for Appgate SDP.
+# User Claim Scripts for AppGate SDP Controller
+
+This repository contains commonly used User Claim Scripts for AppGate SDP.
 
 The scripts are provided as examples and may require modification to suit specific environments or use cases.
 
-Appgate SDP administrators should review and adapt them according to their organization's requirements and policies.
+AppGate SDP administrators should review and adapt them according to their organization's requirements and policies.
 
 Current scripts are:
 

@@ -6,13 +6,13 @@ This script interacts with the Controller to obtain group information from the s
 
 ### Prerequisites
 
-* Must have administrator access to the Admin UI of the Appgate SDP Controller.
+* Must have administrator access to the Admin UI of the AppGate SDP Controller.
 * Must have a working SAML or OIDC Identity Provider.
 * Must have a working LDAP Identity Provider.
 
-## Appgate SDP Controller Configuration
+## AppGate SDP Controller Configuration
 
-1. Login to Appgate Controller Admin UI
+1. Login to AppGate Controller Admin UI
 
 1. Navigate to **Identity** > **Local Users**
     1. Click **Add**

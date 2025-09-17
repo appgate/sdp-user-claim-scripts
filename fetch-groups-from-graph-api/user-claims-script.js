@@ -3,7 +3,7 @@
 
 const logToConsole = false;
 
-// advanced settings, contact Appgate support
+// advanced settings, contact AppGate support
 
 const applicationId = "%SECRET:AZURE_GRAPH_API_APPID%";
 const clientSecret = "%SECRET:AZURE_GRAPH_ID_SECRET%";

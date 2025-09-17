@@ -12,7 +12,7 @@ const agApiProvider = "local";                             // API User Identity 
 const agApiUsername = "ldap-api-user";                     // API User Username
 const agApiPassword = "%SECRET:LDAP_API_USER_PASSWORD%";   // API User Credentials Secret Name
 
-// advanced settings, contact Appgate support
+// advanced settings, contact AppGate support
 
 const ldapTimeoutMs = 5000;   // Max 5 seconds
 const cacheTokenHours = 0.5;  // 0 to disable auth caching

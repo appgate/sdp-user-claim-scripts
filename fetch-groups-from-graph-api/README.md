@@ -7,7 +7,7 @@ To retrieve the full list of group memberships, this user claim script utilizes 
 ### Prerequisites
 
 * Must have administrator access to a Microsoft Entra ID tenant.
-* Must have administrator access to the Admin UI of the Appgate SDP Controller.
+* Must have administrator access to the Admin UI of the AppGate SDP Controller.
 * Must have a working login with SAML or OIDC Application in Azure.
 
 ## EntraID Configuration
@@ -33,9 +33,9 @@ To retrieve the full list of group memberships, this user claim script utilizes 
     1. Under **Configured permissions**, select **Grant admin consent for 'AppName'**.
     1. Confirm selection.
 
-## Appgate SDP Controller Configuration
+## AppGate SDP Controller Configuration
 
-1. Login to Appgate Controller Admin UI.
+1. Login to AppGate Controller Admin UI.
 
 1. Navigate to **System** > **Secrets**.
     1. Click **Add**.
