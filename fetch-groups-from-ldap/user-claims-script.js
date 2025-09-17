@@ -23,7 +23,7 @@ const log = (msg) => logToConsole && console.log(msg);
 
 const cacheKeyToken = "fetch-groups-from-ldap-token-cache";
 
-const empty = { "ldapGroups": [], "ldapGroupsCount": 0 };
+const empty = { "groups": [], "groupsCount": 0 };
 const headers = [
   { key: "Content-Type", value: "application/json" },
   { key: "Accept", value: `application/vnd.appgate.peer-v${agApiVersion}+json` }
@@ -135,7 +135,7 @@ const getGroups = (forceRefresh = false) => {
   }
 
   log("Success.");
-  return { "ldapGroups": groups, "ldapGroupsCount": groups.length };
+  return { "groups": groups, "groupsCount": groups.length };
 }
 
 try {

@@ -51,8 +51,8 @@ This script interacts with the Controller to obtain group information from the s
 
 ## Using the Fetched Groups
 
-Going forward, the scripted groups claim (`claims.user.agScripted.ldapGroups`) should be used in place of the built-in groups claim (`claims.user.groups`).
+Going forward, the scripted groups claim (`claims.user.agScripted.groups`) should be used in place of the built-in groups claim (`claims.user.groups`).
 
 When configuring the Assignment Criteria, select `agScripted` instead of `groups`, then use the following expression:
 
-`ldapGroups.indexOf("group-name-here") > -1`
+`groups.indexOf("group-name-here") > -1`

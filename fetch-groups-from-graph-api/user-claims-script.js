@@ -24,7 +24,7 @@ const apiUrl = `https://graph.microsoft.com/v1.0/users/${claims.user["userId"]}/
 const cacheKeyToken = `entr-ad-token-${claims.user["tenantId"]}`;
 
 const headers = [{ key: "Accept", value: "*/*" }];
-const empty = { "entraGroups": [], "entraGroupsCount": 0 };
+const empty = { "groups": [], "groupsCount": 0 };
 
 if (!claims || !claims.user || !claims.user["tenantId"] || !claims.user["userId"] || !applicationId || !clientSecret) {
   log("ERROR: user info is missing or script not configured correctly.");
@@ -150,4 +150,4 @@ headers.push({ key: "Authorization", value: `Bearer ${token}` });
 const groups = getGraphGroups();
 
 log(`${groups.length} groups collected, returning.`);
-return { "entraGroups": groups, "entraGroupsCount": groups.length };
+return { "groups": groups, "groupsCount": groups.length };
