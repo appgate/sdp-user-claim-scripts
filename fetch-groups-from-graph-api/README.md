@@ -48,8 +48,8 @@ To retrieve the full list of group memberships, this user claim script utilizes 
 1. Navigate to **Identity** > **Identity Providers**.
     1. Select the relevant IdP.
     1. Under **Attributes Mapped to User Claims**:.
-    1. Map **tid** to **tenantId**.
-    1. Map **oid** to **usertId**.
+    1. Map **tid** to **tenantId**. Verify that **tid** claim is passed to the OIDC ID token.
+    1. Map **oid** to **userId**. Verify that **oid** claim is passed to the OIDC ID token.
     1. Note that attribute and claim names are case sensitive.
     1. Under **User Claim Scripts**.
     1. Add **Fetch Groups From Graph API**.
