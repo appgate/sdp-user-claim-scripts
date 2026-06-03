@@ -6,7 +6,7 @@ const logToConsole = false;
 // advanced settings, contact AppGate support
 
 const applicationId = "%SECRET:AZURE_GRAPH_API_APPID%";
-const clientSecret = "%SECRET:AZURE_GRAPH_ID_SECRET%";
+const clientSecret = "%SECRET:AZURE_GRAPH_API_SECRET%";
 
 const nameStartsWith = "";   // group display name prefix to filter, if any
 

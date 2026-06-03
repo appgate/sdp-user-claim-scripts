@@ -42,7 +42,7 @@ To retrieve the full list of group memberships, this user claim script utilizes 
     1. Type **AZURE_GRAPH_API_APPID** as name and  **Application ID from Azure** as value.
     1. Click **Save**.
     1. Click **Add**.
-    1. Type **AZURE_GRAPH_ID_SECRET** as name and  **Client Secret from Azure**  as value.
+    1. Type **AZURE_GRAPH_API_SECRET** as name and  **Client Secret from Azure**  as value.
     1. Click **Save**.
 
 1. Navigate to **Identity** > **Identity Providers**.
