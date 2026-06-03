@@ -39,18 +39,22 @@ To retrieve the full list of group memberships, this user claim script utilizes 
 
 1. Navigate to **System** > **Secrets**.
     1. Click **Add**.
-    1. Type **AZURE_GRAPH_API_APPID** as name and  **Application ID from Azure** as value.
+    1. Type `AZURE_GRAPH_API_APPID` as name and  **Application ID from Azure** as value.
     1. Click **Save**.
     1. Click **Add**.
-    1. Type **AZURE_GRAPH_API_SECRET** as name and  **Client Secret from Azure**  as value.
+    1. Type `AZURE_GRAPH_API_SECRET` as name and  **Client Secret from Azure**  as value.
     1. Click **Save**.
 
 1. Navigate to **Identity** > **Identity Providers**.
-    1. Select the relevant IdP.
+    1. Select the relevant `OIDC` or `SAML` IdP.
     1. Under **Attributes Mapped to User Claims**:.
-    1. Map **tid** to **tenantId**. Verify that **tid** claim is passed to the OIDC ID token.
-    1. Map **oid** to **userId**. Verify that **oid** claim is passed to the OIDC ID token.
-    1. Note that attribute and claim names are case sensitive.
+    1. For `OIDC` provider:
+        1. Map `tid` to `tenantId`. Verify that `tid*` claim is passed to the OIDC ID token.
+        1. Map `oid` to `userId`. Verify that `oid` claim is passed to the OIDC ID token.
+    1. For `SAML` provider:
+        1. Map `http://schemas.microsoft.com/identity/claims/tenantid` to `tenantId`. Verify that `http://.../tenantid` claim is passed to the SAML token.
+        1. Map `http://schemas.microsoft.com/identity/claims/objectidentifier` to `userId`. Verify that `http://.../objectidentifier` claim is passed to the SAML token.
+    1. Note that attribute and claim names are **case sensitive**.
     1. Under **User Claim Scripts**.
     1. Add **Fetch Groups From Graph API**.
     1. Save.
