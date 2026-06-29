@@ -15,3 +15,5 @@ Current scripts are:
 - Fetching additional groups from another LDAP Provider:  [fetch-groups-from-ldap](fetch-groups-from-ldap/README.md)
 
 - Fetching additional groups from Microsoft Graph API: [fetch-groups-from-graph-api](fetch-groups-from-graph-api/README.md)
+
+- Fetching assigned app IDs from Okta: [fetch-app-ids-from-okta](fetch-app-ids-from-okta/README.md)
